@@ -13,11 +13,12 @@ Galasa provides Helm charts to install various components, the main one being a 
   - [Galasa Ecosystem chart](#galasa-ecosystem-chart)
     - [Kubernetes RBAC setup](#kubernetes-rbac-setup)
     - [Installing the Ecosystem chart on a remote Kubernetes cluster](#installing-the-ecosystem-chart-on-a-remote-kubernetes-cluster)
+      - [Configuring Gateway API](#configuring-gateway-api)
       - [Configuring Ingress](#configuring-ingress)
       - [Configuring Dex](#configuring-dex)
       - [Configuring your Kafka cluster to use the Galasa Kafka extension (Optional)](#configuring-your-kafka-cluster-to-use-the-galasa-kafka-extension-optional)
       - [Configuring Log4j for the Galasa service's logs (Optional)](#configuring-log4j-for-the-galasa-services-logs-optional)
-      - [Configuring public certificates (Optional)](#configuring-public-certificates-optional)
+      - [Configuring Public Certificates (Optional)](#configuring-public-certificates-optional)
       - [Installing your Galasa Ecosystem](#installing-your-galasa-ecosystem)
     - [Verifying your Galasa Ecosystem Installation](#verifying-your-galasa-ecosystem-installation)
       - [Accessing services](#accessing-services)
@@ -31,7 +32,6 @@ Galasa provides Helm charts to install various components, the main one being a 
       - [Linux](#linux)
       - [macOS](#macos)
     - [Development](#development)
-  - [Certificate Installer chart](./charts/cert-installer/README.md)
 
 ## Galasa Ecosystem chart
 ### Kubernetes RBAC setup
@@ -65,9 +65,33 @@ Download the [values.yaml](charts/ecosystem/values.yaml) file and within it:
 
 Once you have updated the `galasaVersion` and `externalHostname` values, continue following the instructions below to set up Ingress and Dex for your ecosystem.
 
+#### Configuring Gateway API
+
+As of 0.47.0, the ecosystem chart has support for using Kubernetes' [Gateway API](https://gateway-api.sigs.k8s.io/) to reach services running within a Kubernetes cluster.
+
+To use the Gateway API, your Kubernetes cluster must have the following installed:
+- [A Gateway Controller](https://gateway-api.sigs.k8s.io/guides/getting-started/#installing-a-gateway-controller)
+- [The Gateway API CRDs](https://gateway-api.sigs.k8s.io/guides/getting-started/#installing-gateway-api)
+
+Configure the Gateway API by updating the values under the `gateway` section within your values.yaml file as follows:
+1. Set the `enabled` value to `true` to enable the use of the Gateway API.
+2. Set the `gatewayClassName` value to the name of the GatewayClass that is configured in your cluster.
+
+If you are using HTTPS:
+1. Add a `tls` configuration within the `gateway` section, specifying the TLS mode and references to the Kubernetes resources where your TLS certificates are stored. For example:
+
+    ```yaml
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - kind: Secret
+        group: ""
+        name: my-certificate-secret
+    ```
+
 #### Configuring Ingress
 
-The ecosystem chart uses Ingress to reach services running within a Kubernetes cluster. See the [Kubernetes documentation](https://kubernetes.io/docs/concepts/services-networking/ingress) to learn more about Ingress.
+By default, the ecosystem chart uses Ingress to reach services running within a Kubernetes cluster. See the [Kubernetes documentation](https://kubernetes.io/docs/concepts/services-networking/ingress) to learn more about Ingress.
 
 Assuming your Ingress controller has been set up on your Kubernetes cluster, update the values under the `ingress` section within your values.yaml file as follows to configure the use of Ingress in your ecosystem:
 
