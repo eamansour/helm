@@ -22,7 +22,11 @@
   Returns the URI scheme of the host serving the ecosystem
 */}}
 {{- define "ecosystem.host.scheme" -}}
-  {{- empty .Values.ingress.tls | ternary "http" "https" }}
+  {{- $hostScheme := "http" }}
+  {{- if or (and .Values.ingress.enabled .Values.ingress.tls) (and .Values.gatewayApi.enabled .Values.gatewayApi.tls) }}
+    {{- $hostScheme = "https" }}
+  {{- end }}
+  {{- print $hostScheme }}
 {{- end -}}
 
 {{/*

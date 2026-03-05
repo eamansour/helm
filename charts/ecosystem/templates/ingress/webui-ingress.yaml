@@ -4,18 +4,15 @@
 # SPDX-License-Identifier: EPL-2.0
 #
 
+{{- if and .Values.ingress.enabled (not .Values.gatewayApi.enabled) }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ .Release.Name }}-api
+  name: {{ .Release.Name }}-webui
+  {{- with .Values.ingress.annotations }}
   annotations:
-    {{- with .Values.ingress.annotations }}
-      {{- toYaml . | nindent 4 }}
-    {{- end }}
-    {{- with .Values.apiServer.ingressAnnotations }}
-      {{- toYaml . | nindent 4 }}
-    {{- end }}
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   ingressClassName: {{ .Values.ingress.ingressClassName }}
   {{- with .Values.ingress.tls }}
@@ -26,10 +23,11 @@ spec:
   - host: {{ .Values.externalHostname }}
     http:
       paths:
-      - path: /api(/|$)(.*)
-        pathType: ImplementationSpecific
+      - path: /
+        pathType: Prefix
         backend:
           service:
-            name: {{ .Release.Name }}-api
+            name: {{ .Release.Name }}-webui
             port:
               number: 8080
+{{- end }}
