@@ -283,23 +283,28 @@ gatewayApi:
   # The name of the GatewayClass to use for the Gateway API resources.
   gatewayClassName: ""
 
-  # Annotations to be added to Gateway resources. For example:
+  # Annotations to be added to the service's Gateway resource. For example:
   # gatewayAnnotations:
   #   cert-manager.io/issuer: my-issuer
   gatewayAnnotations: {}
 
-  # Optional - Configures the use of TLS in Gateway API resources. For example:
-  # tls:
-  #   mode: Terminate
-  #   certificateRefs:
-  #   - kind: Secret
-  #     group: ""
-  #     name: my-certificate-secret
-  tls: {}
+  # Annotations to be added to the service's HTTPRoute resource. For example:
+  # httpRouteAnnotations:
+  #   annotationKey: annotationValue
+  httpRouteAnnotations: {}
+
+  # Optional - Configures the use of TLS in Gateway API resources.
+  tls:
+    # References to one or more Kubernetes resources containing TLS certificates. For example:
+    # certificateRefs:
+    #   - kind: Secret
+    #     group: ""
+    #     name: my-certificate-secret
+    certificateRefs: []
 
 #
 # IMPORTANT: Kubernetes Ingress API has been frozen as of March 2026 and is no longer being developed.
-# The Kubernetes project recommends using the Gateway API instead - see https://kubernetes.io/blog/2025/11/11/ingress-nginx-retirement/
+# The Kubernetes project recommends using the Gateway API instead.
 #
 # Values to configure global settings applied to all ingresses
 # Note: The externalHostname value must be a valid DNS name for ingress to be used.

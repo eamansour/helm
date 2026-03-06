@@ -23,7 +23,7 @@
 */}}
 {{- define "ecosystem.host.scheme" -}}
   {{- $hostScheme := "http" }}
-  {{- if or (and .Values.ingress.enabled .Values.ingress.tls) (and .Values.gatewayApi.enabled .Values.gatewayApi.tls) }}
+  {{- if or (and .Values.ingress.enabled .Values.ingress.tls) (and .Values.gatewayApi.enabled .Values.gatewayApi.tls.certificateRefs) }}
     {{- $hostScheme = "https" }}
   {{- end }}
   {{- print $hostScheme }}

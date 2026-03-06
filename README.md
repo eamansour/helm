@@ -78,15 +78,14 @@ Configure the Gateway API by updating the values under the `gateway` section wit
 2. Set the `gatewayClassName` value to the name of the GatewayClass that is configured in your cluster.
 
 If you are using HTTPS:
-1. Add a `tls` configuration within the `gateway` section, specifying the TLS mode and references to the Kubernetes resources where your TLS certificates are stored. For example:
+1. Add one or more certificate references to the `certificateRefs` value within the `tls` section. For example, to add a reference to a Kubernetes Secret called `my-certificate-secret`, set the `certificateRefs` value as follows:
 
     ```yaml
     tls:
-      mode: Terminate
       certificateRefs:
-      - kind: Secret
-        group: ""
-        name: my-certificate-secret
+        - kind: Secret
+          group: ""
+          name: my-certificate-secret
     ```
 
 #### Configuring Ingress
