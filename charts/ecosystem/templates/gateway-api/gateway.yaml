@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: EPL-2.0
 #
 
-{{- if .Values.gatewayApi.enabled }}
+{{- if and .Values.gatewayApi.enabled (not .Values.ingress.enabled) }}
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:

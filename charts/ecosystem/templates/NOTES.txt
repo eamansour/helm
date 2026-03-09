@@ -5,12 +5,12 @@
 Refer to the Galasa documentation at https://galasa.dev/docs/ecosystem/ecosystem-installing-k8s for a list of supported Kubernetes versions.
 {{- end }}
 ---------------
-{{- if and .Values.gatewayApi.enabled .Values.ingress.enabled }}
-⚠️ WARNING: The values provided have 'gatewayApi.enabled' and 'ingress.enabled' both set to true.
+{{- if and .Values.ingress.enabled .Values.gatewayApi.enabled }}
+⚠️ WARNING: The values provided have 'ingress.enabled' and 'gatewayApi.enabled' both set to true.
 
-This installation will proceed to use the Gateway API configuration provided and will ignore the Ingress configuration.
-{{- end }}
+This installation will proceed to use the Ingress configuration provided and will ignore the Gateway API configuration.
 ---------------
+{{- end }}
 
 Thank you for installing the Galasa service chart!
 To learn more about the Galasa service, visit https://galasa.dev/docs/ecosystem/#running-tests-in-the-galasa-ecosystem
