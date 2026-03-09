@@ -271,11 +271,48 @@ apiServer:
   #
   allowedOrigins:
     - "*"
+
+#
+# Values to configure the use of Gateway API resources to access the Galasa service.
+# Note: The externalHostname value must be a valid DNS name for Gateway API to be used.
+#
+gatewayApi:
+  # A true/false value that determines whether to create Gateway API resources for accessing the Galasa service.
+  enabled: false
+
+  # The name of the GatewayClass to use for the Gateway API resources.
+  gatewayClassName: ""
+
+  # Annotations to be added to the service's Gateway resource. For example:
+  # gatewayAnnotations:
+  #   cert-manager.io/issuer: my-issuer
+  gatewayAnnotations: {}
+
+  # Annotations to be added to the service's HTTPRoute resource. For example:
+  # httpRouteAnnotations:
+  #   annotationKey: annotationValue
+  httpRouteAnnotations: {}
+
+  # Optional - Configures the use of TLS in Gateway API resources.
+  tls:
+    # References to one or more Kubernetes resources containing TLS certificates. For example:
+    # certificateRefs:
+    #   - kind: Secret
+    #     group: ""
+    #     name: my-certificate-secret
+    certificateRefs: []
+
+#
+# IMPORTANT: Kubernetes Ingress API has been frozen as of March 2026 and is no longer being developed.
+# The Kubernetes project recommends using the Gateway API instead.
 #
 # Values to configure global settings applied to all ingresses
 # Note: The externalHostname value must be a valid DNS name for ingress to be used.
 #
 ingress:
+  # A true/false value that determines whether to create Ingress resources for accessing the Galasa service.
+  enabled: true
+
   # The IngressClass to use for ingresses
   ingressClassName: "nginx"
 

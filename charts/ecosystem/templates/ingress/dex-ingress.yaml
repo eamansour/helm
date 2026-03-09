@@ -4,10 +4,11 @@
 # SPDX-License-Identifier: EPL-2.0
 #
 
+{{- if .Values.ingress.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ .Release.Name }}-webui
+  name: {{ .Release.Name }}-dex
   {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -22,10 +23,11 @@ spec:
   - host: {{ .Values.externalHostname }}
     http:
       paths:
-      - path: /
+      - path: /dex
         pathType: Prefix
         backend:
           service:
-            name: {{ .Release.Name }}-webui
+            name: {{ .Release.Name }}-dex
             port:
-              number: 8080
+              number: 5556
+{{- end }}

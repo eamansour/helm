@@ -1,0 +1,49 @@
+#
+# Copyright contributors to the Galasa project
+#
+# SPDX-License-Identifier: EPL-2.0
+#
+
+{{- if and .Values.gatewayApi.enabled (not .Values.ingress.enabled) }}
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: {{ .Release.Name }}-httproute
+  {{- with .Values.gatewayApi.httpRouteAnnotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  hostnames:
+  - {{ .Values.externalHostname }}
+  parentRefs:
+  - name: {{ .Release.Name}}-gateway
+  rules:
+  - backendRefs:
+    - name: {{ .Release.Name }}-api
+      port: 8080
+    matches:
+    - path:
+        type: PathPrefix
+        value: /api
+    filters:
+      - type: URLRewrite
+        urlRewrite:
+          path:
+            type: ReplacePrefixMatch
+            replacePrefixMatch: /
+  - backendRefs:
+    - name: {{ .Release.Name }}-dex
+      port: 5556
+    matches:
+    - path:
+        type: PathPrefix
+        value: /dex
+  - backendRefs:
+    - name: {{ .Release.Name }}-webui
+      port: 8080
+    matches:
+    - path:
+        type: PathPrefix
+        value: /
+{{- end }}
