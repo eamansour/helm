@@ -5,7 +5,7 @@
 Refer to the Galasa documentation at https://galasa.dev/docs/ecosystem/ecosystem-installing-k8s for a list of supported Kubernetes versions.
 {{- end }}
 ---------------
-{{- if and .Values.gatewayApi.enabled .Values.ingress.enabled -}}
+{{- if and .Values.gatewayApi.enabled .Values.ingress.enabled }}
 ⚠️ WARNING: The values provided have 'gatewayApi.enabled' and 'ingress.enabled' both set to true.
 
 This installation will proceed to use the Gateway API configuration provided and will ignore the Ingress configuration.
