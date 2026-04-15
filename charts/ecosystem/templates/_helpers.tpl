@@ -95,3 +95,10 @@
 {{- define "max.grpc.message.size" -}}
   {{- empty .Values.maxgRPCMessageSize | ternary (4194304) (.Values.maxgRPCMessageSize) }}
 {{- end -}}
+
+{{/*
+  Returns Istio mTLS mode
+*/}}
+{{- define "istio.mtls.mode" -}}
+  {{- .Values.istio.mtlsMode | default "STRICT" | upper }}
+{{- end -}}
