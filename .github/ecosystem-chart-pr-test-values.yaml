@@ -1,0 +1,46 @@
+#
+# Copyright contributors to the Galasa project
+#
+# SPDX-License-Identifier: EPL-2.0
+#
+
+# Helm values used by the ecosystem chart pull request workflow to install and test
+# the development images in a temporary kind cluster with Istio Gateway API routing.
+
+externalHostname: "localhost"
+galasaVersion: "main"
+galasaRegistry: "ghcr.io/galasa-dev"
+galasaBootImage: "galasa-boot-embedded"
+galasaWebUiImage: "webui"
+pullPolicy: "Always"
+
+apiServer:
+  replicaCount: 1
+  resources: {}
+
+ingress:
+  enabled: false
+
+gatewayApi:
+  enabled: true
+  gatewayClassName: "istio"
+
+istio:
+  enabled: true
+
+dex:
+  config:
+    issuer: "http://localhost/dex"
+    enablePasswordDB: true
+    staticPasswords:
+    - email: "admin@example.com"
+      hash: "$2a$10$2b2cU8CPhOTaGrs1HRQuAueS7JTT5ZHsHSzYiFPm1leZck7Mc8T4W"
+      username: "admin"
+      userID: "08a8684b-db88-4b73-90a9-3cd1661f5466"
+
+couchdb:
+  resources:
+    requests:
+      memory: "500Mi"
+    limits:
+      memory: "2Gi"
